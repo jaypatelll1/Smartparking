@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 
@@ -11,6 +12,23 @@ const Home = ({ navigation }) => {
 	const [parkinginfo2, setparkinginfo2] = useState("vacant...");
 	const [parkinginfo3, setparkinginfo3] = useState("vacant...");
 	const [charginginfo, setcharginginfo] = useState("vacant...");
+
+	useEffect(() => {
+		const intervalRef = setInterval(() => {
+			axios
+				.get("http://192.168.45.238/")
+				.then((res) => {
+					console.log(res.data);
+					setBackendState(res.data);
+				})
+				.catch((err) => {
+					console.log("could not fetch data");
+				});
+		}, 5000);
+
+		return () => clearInterval(intervalRef);
+	}, []);
+
 	return (
 		<View style={styles.container}>
 			<TouchableOpacity
